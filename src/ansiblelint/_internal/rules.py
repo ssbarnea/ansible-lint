@@ -10,7 +10,20 @@ if TYPE_CHECKING:
     from ansiblelint.file_utils import Lintable
 
 _logger = logging.getLogger(__name__)
+LOAD_FAILURE_MD = """\
+# load-failure
 
+Linter failed to process a YAML file, probably because it is either:
+
+* contains unsupported encoding (only UTF-8 is supported)
+* not an Ansible file
+* it contains some unsupported custom YAML objects (`!!` prefix)
+* it was not able to decrypt an inline `!vault` block.
+
+This violation is **not skippable**, so you cannot add it to `warn_list` or
+`skip_list`. If you cannot address the vault decryption, your only other option
+is to add the offending file to `exclude_paths`.
+"""
 
 # Derived rules are likely to want to access class members, so:
 # pylint: disable=unused-argument
@@ -130,5 +143,6 @@ class LoadingFailureRule(BaseRule):
     id = "load-failure"
     description = "Linter failed to process a YAML file, possible not an Ansible file."
     severity = "VERY_HIGH"
-    tags = ["core"]
+    tags = ["core", "unskippable"]
     version_added = "v4.3.0"
+    help = LOAD_FAILURE_MD
