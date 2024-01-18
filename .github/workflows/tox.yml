@@ -78,7 +78,7 @@ jobs:
           submodules: true
 
       - name: Set pre-commit cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         if: ${{ matrix.passed_name == 'lint' }}
         with:
           path: |
@@ -86,7 +86,7 @@ jobs:
           key: pre-commit-${{ matrix.name || matrix.passed_name }}-${{ hashFiles('.pre-commit-config.yaml') }}
 
       - name: Set ansible cache(s)
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             .cache/eco
